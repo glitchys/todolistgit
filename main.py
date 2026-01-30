@@ -1,3 +1,12 @@
+def get_todos(filepath = "todos.txt"):
+    with open(filepath, "r") as file_local:
+        todos_local = file_local.readlines()
+    return todos_local
+
+def write_todos(todos_arg, filepath = "todos.txt" ):
+    with open(filepath, "w") as file:
+        file.writelines(todos_arg)
+
 while True:
     user_action = input("Type add, show, edit, complete or exit: ")
     user_action = user_action.strip()
@@ -5,17 +14,12 @@ while True:
     if user_action.startswith('add'):
         todo = user_action[4:]
 
-        with open("todos.txt", "r") as file:
-            todos = file.readlines()
-
+        todos = get_todos()
         todos.append(todo + '\n')
-
-        with open("todos.txt", "w") as file:
-            file.writelines(todos)
-
-    if user_action.startswith('show'):
-        with open("todos.txt", "r") as file:
-            todos = file.readlines()
+        ##function
+        write_todos(todos)
+    elif user_action.startswith('show'):
+        todos = get_todos()
         #new_todos = [item.strip('\n') for item in todos]
         for index, item in enumerate(todos):
             item = item.strip('\n')
@@ -26,12 +30,10 @@ while True:
             number = int(user_action[5:])
             print(number)
             number = number - 1
-            with open("todos.txt", "r") as file:
-                todos = file.readlines()
+            todos = get_todos()
             new_todo = input("Enter new todo: ")
             todos[number] = new_todo + "\n"
-            with open("todos.txt", "w") as file:
-                file.writelines(todos)
+            write_todos(todos)
         except ValueError:
             print("Wrong input, Try again.")
             continue
@@ -40,24 +42,24 @@ while True:
         try:
             number = int(user_action[9:])
 
-            with open("todos.txt", "r") as file:
-                todos = file.readlines()
+            todos = get_todos()
             index = number - 1
+
             todo_to_remove = todos[index].strip('\n')
             todos.pop(number - 1)
-            with open("todos.txt", "w") as file:
-                file.writelines(todos)
+
+            write_todos(todos)
+
             message = f"Todo {todo_to_remove} has been completed."
             print(message)
         except IndexError:
             print("Theres no item with that number")
             continue
 
-    elif 'exit' in user_action:
+    elif user_action.startswith('exit'):
         break
 
     else:
         print("Invalid input")
-
 
 print("Goodbye")
