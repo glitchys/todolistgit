@@ -1,11 +1,8 @@
-def get_todos(filepath = "todos.txt"):
-    with open(filepath, "r") as file_local:
-        todos_local = file_local.readlines()
-    return todos_local
+from modules import functions
+import time
 
-def write_todos(todos_arg, filepath = "todos.txt" ):
-    with open(filepath, "w") as file:
-        file.writelines(todos_arg)
+now = time.strftime("%b %d, %Y  %H:%M:%S")
+print("It is now", now)
 
 while True:
     user_action = input("Type add, show, edit, complete or exit: ")
@@ -14,12 +11,12 @@ while True:
     if user_action.startswith('add'):
         todo = user_action[4:]
 
-        todos = get_todos()
+        todos = functions.get_todos()
         todos.append(todo + '\n')
         ##function
-        write_todos(todos)
+        functions.write_todos(todos)
     elif user_action.startswith('show'):
-        todos = get_todos()
+        todos = functions.get_todos()
         #new_todos = [item.strip('\n') for item in todos]
         for index, item in enumerate(todos):
             item = item.strip('\n')
@@ -30,10 +27,10 @@ while True:
             number = int(user_action[5:])
             print(number)
             number = number - 1
-            todos = get_todos()
+            todos = functions.get_todos()
             new_todo = input("Enter new todo: ")
             todos[number] = new_todo + "\n"
-            write_todos(todos)
+            functions.write_todos(todos)
         except ValueError:
             print("Wrong input, Try again.")
             continue
@@ -42,13 +39,13 @@ while True:
         try:
             number = int(user_action[9:])
 
-            todos = get_todos()
+            todos = functions.get_todos()
             index = number - 1
 
             todo_to_remove = todos[index].strip('\n')
             todos.pop(number - 1)
 
-            write_todos(todos)
+            functions.write_todos(todos)
 
             message = f"Todo {todo_to_remove} has been completed."
             print(message)
